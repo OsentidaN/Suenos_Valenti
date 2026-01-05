@@ -1,0 +1,56 @@
+[
+    {
+        "id": 1,
+        "nombre": "Viaje al Ser Interno",
+        "precio": 105,
+        "duracion": "90 min",
+        "descripcion": "Exploración profunda del yo interior a través de técnicas ancestrales de conexión con el ser interior.",
+        "image": "img/simbolo_arcano.jpg",
+        "instructor": "Mauricio Valenti Rosas"
+    },
+    {
+        "id": 2,
+        "nombre": "Meditación del Despertar",
+        "precio": 200,
+        "duracion": "60 min",
+        "descripcion": "Alcanza estados profundos de relajación y conexión espiritual a través de técnicas ancestrales de meditación.",
+        "image": "img/hombre_loto.jpg",
+        "instructor": "Laura Rodríguez López"
+    },
+    {
+        "id": 3,
+        "nombre": "Conexión SupraConsciente",
+        "precio": 205,
+        "duracion": "150 min",
+        "descripcion": "Acceso a estados elevados de consciencia, te permitirá conectar con tu ser supremo y alcanzar un estado de plenitud interior y satisfacción plena.",
+        "image": "img/hombre_meditando.jpg",
+        "instructor": "Sandra García López"
+    },
+    {
+        "id": 4,
+        "nombre": "Yoga Kundalini",
+        "precio": 150,
+        "duracion": "60 min",
+        "descripcion": "Despierta tu energía vital con prácticas dinámicas que combinan posturas, respiración y mantras tradicionales. Aumenta tu fuerza, flexibilidad y concentración mental.",
+        "image": "img/yoga_arbol.jpg",
+        "instructor": "Raquel Salido Morales"
+    },
+    {
+        "id": 5,
+        "nombre": "Viaje Astral Asistido",
+        "precio": 80,
+        "duracion": "120 min",
+        "descripcion": " Experimenta la proyección astral en un entorno seguro y guiado por expertods en consciencia expandida.",
+        "image": "img/mujer_meditando.jpg",
+        "instructor": "Samuel Valenti Rosas"
+    },
+    {
+        "id": 6,
+        "nombre": "Respiración Holotrópica",
+        "precio": 65,
+        "duracion": "90 min",
+        "descripcion": "Alcanza estados alterados de consciencia a través de patrones de respiración intensos y musicoterapia.",
+        "image": "img/sesion_meditacion_grupal.jpg",
+        "instructor": "Beatriz Galindo Saavedra"
+    }
+]

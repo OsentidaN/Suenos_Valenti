@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="es">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Sueños Valenti - Portal de Sesiones Interactivas</title>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,700;1,700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="css/styles.css" />
+    </head>
+    <body>
+        <header class="encabezado-principal">
+            <div class="encabezado-contenido">
+                <div class="encabezado-izquierda">
+                    <svg class="icono-destellos" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962l6.135-1.582a2 2 0 0 0 1.437-1.437l1.582-6.135a.5.5 0 0 1 .963 0l1.582 6.135a2 2 0 0 0 1.437 1.437l6.135 1.582a.5.5 0 0 1 0 .962l-6.135 1.582c-.137.035-.266.097-.379.182l-1.058 4.113a.5.5 0 0 1-.963 0l-1.058-4.113Z"/>
+                    </svg>
+                    <div class="texto-logo">
+                        <h1 id="logo">Sueños Valenti</h1>
+                        <p>Portal de Sesiones Interactivas de Supra Consciencia</p>
+                    </div>
+                </div>
+
+                <nav class="enlaces-navegacion">
+                    <a href="#" onclick="window.cambiarVistaGlobal('inicio'); return false;">Inicio</a>
+                    <a href="#" onclick="window.cambiarVistaGlobal('sesiones'); return false;">Sesiones</a>
+                    <a href="#" onclick="window.cambiarVistaGlobal('preferencias'); return false;">Preferencias</a>
+                </nav>
+
+                <button class="boton-carrito" id="btn-carrito" aria-label="Carrito de compras">
+                    <svg class="icono-carrito" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="8" cy="21" r="1"/>
+                        <circle cx="19" cy="21" r="1"/>
+                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+                    </svg>
+                    <span class="insignia" id="insignia-carrito" style="display: none">0</span>
+                </button>
+            </div>
+        </header>
+
+        <main>
+            <section id="vista-inicio" class="vista activa seccion-hero">
+                <div class="fondo-hero">
+                    <img src="img/hombre_meditando.jpg" alt="Meditación y Yoga" />
+                    <div class="capa-hero"></div>
+                </div>
+            
+                <div class="contenido-hero">
+                    <h1 class="texto-gradiente">Sueños Valenti</h1>
+                    <h2 class="texto-subtitulo">Sesiones Interactivas de Supra Consciencia</h2>
+                    <p>
+                        Bienvenido a tu portal de transformación espiritual. Descubre
+                        sesiones grupales diseñadas para conectar con tu ser más profundo y
+                        despertar tu consciencia superior. Cada experiencia es única y
+                        transformadora.
+                    </p>
+                    <button class="boton-hero" onclick="window.cambiarVistaGlobal('sesiones')">
+                        Explorar Sesiones
+                    </button>
+                </div>
+            </section>
+
+            <section id="vista-sesiones" class="vista contenedor-contenido">
+                <div class="encabezado-sesiones">
+                    <h2>Nuestras Sesiones</h2>
+                    <p>
+                        Explora nuestro catálogo de experiencias diseñadas para expandir tu consciencia
+                        y nutrir tu espíritu
+                    </p>
+                </div>
+                <div id="contenedor-sesiones"></div>
+            </section>
+
+            <section id="vista-carrito" class="vista contenedor-contenido">
+                <h2>Carrito Espiritual</h2>
+                <div id="contenedor-carrito-vista"></div>
+            </section>
+            <!-- Carrito vista lateral -->
+            <div id="modal-carrito" class="contenedor-modal-carrito">
+                <div class="fondo-modal-carrito" id="btn-cerrar-fondo-carrito"></div>
+                <div class="panel-carrito">
+                    <div class="encabezado-carrito">
+                        <div class="titulo-carrito">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+                            <h2>Carrito</h2>
+                        </div>
+                        <button class="boton-icono" id="btn-cerrar-carrito" aria-label="Cerrar carrito">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 18 18"/></svg>
+                        </button>
+                    </div>
+            
+                    <div id="contenedor-items-carrito" class="contenedor-items-carrito">
+                        <!-- Items del carrito que se insertarán aquí por JS -->
+                    </div>
+            
+                    <div id="pie-carrito" class="pie-carrito oculto">
+                        <div class="fila-total-carrito">
+                            <span>Total:</span>
+                            <span id="monto-total-carrito" class="monto-total">0.00€</span>
+                        </div>
+                        <button class="boton-pagar">Proceder al Pago</button>
+                    </div>
+                </div>
+            </div>
+
+            <section id="vista-preferencias" class="vista contenedor-contenido">
+                <div class="encabezado-sesiones">
+                    <h2>Preferencias</h2>
+                </div>
+            
+                <div class="cuadricula-prefs">
+                <!-- Tarjeta Tema -->
+                <div class="tarjeta-pref">
+                    <div class="contenedor-icono-pref">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><path d="M12 1v2"/><path d="M12 21v2"/><path d="M4.22 4.22l1.42 1.42"/><path d="M18.36 18.36l1.42 1.42"/><path d="M1 12h2"/><path d="M21 12h2"/><path d="M4.22 19.78l1.42-1.42"/><path d="M18.36 5.64l1.42-1.42"/></svg>
+                    </div>
+                    <div class="contenido-pref">
+                        <h3>Apariencia</h3>
+                        <p>Personaliza el tema visual</p>
+                        <button class="btn-pref" id="btn-tema">☀️ Claro</button>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Notificaciones -->
+                <div class="tarjeta-pref">
+                    <div class="contenedor-icono-pref">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                    </div>
+                    <div class="contenido-pref">
+                        <h3>Notificaciones</h3>
+                        <p>Gestiona tus alertas</p>
+                        <div class="contenedor-interruptor" id="contenedor-interruptor-notif">
+                            <span class="etiqueta-interruptor">Activar</span>
+                            <div class="interruptor" id="interruptor-notificaciones"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tarjeta Datos -->
+                <div class="tarjeta-pref zona-peligro">
+                    <div class="contenedor-icono-pref peligro">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                    </div>
+                    <div class="contenido-pref">
+                        <h3>Zona de Peligro</h3>
+                        <p>Gestionar datos de la aplicación</p>
+                        <button class="btn btn-peligro-outline" id="btn-borrar-datos">Borrar Datos</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contacto" class="pie-principal">
+        <div class="contenedor-pie">
+            <div class="cuadricula-pie">
+                <div class="marca-pie">
+                    <div class="logo-pie">
+                        <svg class="icono-destellos-pie" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M9.937 15.5A2 2 0 0 0 8.5 14.063l-6.135-1.582a.5.5 0 0 1 0-.962l6.135-1.582a2 2 0 0 0 1.437-1.437l1.582-6.135a.5.5 0 0 1 .963 0l1.582 6.135a2 2 0 0 0 1.437 1.437l6.135 1.582a.5.5 0 0 1 0 .962l-6.135 1.582c-.137.035-.266.097-.379.182l-1.058 4.113a.5.5 0 0 1-.963 0l-1.058-4.113Z"/>
+                        </svg>
+                        <h3>Sueños Valenti</h3>
+                    </div>
+                    <p>Portal de Sesiones Interactivas de Supra Consciencia</p>
+                </div>
+                <div id="sobre" class="seccion-pie">
+                    <h4>Sobre Nosotros</h4>
+                    <p>
+                        Somos un espacio dedicado a la exploración de la consciencia superior a través de
+                        prácticas ancestrales y técnicas modernas de meditación, yoga y sanación energética.
+                    </p>
+                </div>
+                <div class="seccion-pie">
+                    <h4>Contacto</h4>
+                    <div class="info-contacto">
+                        <div class="item-contacto">
+                            <svg class="icono-pequeno" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                            <span>info@suenosvalenti.com</span>
+                        </div>
+                        <div class="item-contacto">
+                            <svg class="icono-pequeno" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                            <span>+34 123 456 789</span>
+                        </div>
+                        <div class="item-contacto">
+                            <svg class="icono-pequeno" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+                            <span>Parla, Madrid, España</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="derechos-pie">
+                <p>&copy; 2025 Sueños Valenti. Todos los derechos reservados.</p>
+                <p class="info-proyecto">Proyecto DWEC - Desarrollo Web Entorno Cliente</p>
+            </div>
+        </div>
+    </footer>
+    
+    <script type="module" src="js/main.js"></script>
+    </body>
+</html>
