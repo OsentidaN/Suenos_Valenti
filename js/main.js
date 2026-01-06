@@ -16,27 +16,43 @@ import { obtenerPreferencias, guardarPreferencias } from './utils.js';
 let sesiones = [];
 
 // Elementos del DOM
-const vistas = {
-    inicio: document.getElementById('vista-inicio'),
-    sesiones: document.getElementById('vista-sesiones'),
-    carrito: document.getElementById('vista-carrito'),
-    preferencias: document.getElementById('vista-preferencias')
-};
+/**
+ * Obtiene los elementos de las vistas de forma diferida para mayor seguridad
+ */
+function obtenerElementosVistas() {
+    return {
+        inicio: document.getElementById('vista-inicio'),
+        sesiones: document.getElementById('vista-sesiones'),
+        carrito: document.getElementById('vista-carrito'),
+        preferencias: document.getElementById('vista-preferencias')
+    };
+}
 
 /**
  * Cambia la vista activa de la aplicación
  */
 function cambiarVista(nombreVista) {
-    Object.keys(vistas).forEach(key => {
-        vistas[key].classList.remove('activa');
+    console.log('Cambiando a vista:', nombreVista);
+    const elementosVistas = obtenerElementosVistas();
+
+    Object.keys(elementosVistas).forEach(key => {
+        if (elementosVistas[key]) {
+            elementosVistas[key].classList.remove('activa');
+        }
     });
-    vistas[nombreVista].classList.add('activa');
+
+    if (elementosVistas[nombreVista]) {
+        elementosVistas[nombreVista].classList.add('activa');
+    } else {
+        console.error('No se encontró la vista:', nombreVista);
+    }
 }
 
 // Hacer la función global para que pueda ser llamada desde onclick en HTML
 window.cambiarVistaGlobal = (nombreVista) => {
+    console.log('Navegación solicitada (global):', nombreVista);
     cambiarVista(nombreVista);
-    ocultarMenuMovil(); // Cerrar menú al navegar
+    ocultarMenuMovil();
 };
 
 /**
@@ -45,8 +61,8 @@ window.cambiarVistaGlobal = (nombreVista) => {
 function toggleMenuMovil() {
     const nav = document.getElementById('nav-principal');
     const overlay = document.getElementById('overlay-menu');
-    nav.classList.toggle('abierto');
-    overlay.classList.toggle('mostrar');
+    if (nav) nav.classList.toggle('abierto');
+    if (overlay) overlay.classList.toggle('mostrar');
 }
 
 function ocultarMenuMovil() {
