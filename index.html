@@ -22,22 +22,33 @@
                     </div>
                 </div>
 
-                <nav class="enlaces-navegacion">
+                <nav class="enlaces-navegacion" id="nav-principal">
                     <a href="#" onclick="window.cambiarVistaGlobal('inicio'); return false;">Inicio</a>
                     <a href="#" onclick="window.cambiarVistaGlobal('sesiones'); return false;">Sesiones</a>
                     <a href="#" onclick="window.cambiarVistaGlobal('preferencias'); return false;">Preferencias</a>
                 </nav>
 
-                <button class="boton-carrito" id="btn-carrito" aria-label="Carrito de compras">
-                    <svg class="icono-carrito" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <circle cx="8" cy="21" r="1"/>
-                        <circle cx="19" cy="21" r="1"/>
-                        <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
-                    </svg>
-                    <span class="insignia" id="insignia-carrito" style="display: none">0</span>
-                </button>
+                <div class="header-acciones">
+                    <button class="boton-carrito" id="btn-carrito" aria-label="Carrito de compras">
+                        <svg class="icono-carrito" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="8" cy="21" r="1"/>
+                            <circle cx="19" cy="21" r="1"/>
+                            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+                        </svg>
+                        <span class="insignia" id="insignia-carrito" style="display: none">0</span>
+                    </button>
+
+                    <button class="menu-toggle" id="menu-toggle" aria-label="Abrir menú de navegación">
+                        <svg class="icono-hamburguesa" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="3" y1="12" x2="21" y2="12"></line>
+                            <line x1="3" y1="6" x2="21" y2="6"></line>
+                            <line x1="3" y1="18" x2="21" y2="18"></line>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </header>
+        <div class="overlay-menu" id="overlay-menu"></div>
 
         <main>
             <section id="vista-inicio" class="vista activa seccion-hero">

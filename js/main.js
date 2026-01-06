@@ -34,7 +34,27 @@ function cambiarVista(nombreVista) {
 }
 
 // Hacer la función global para que pueda ser llamada desde onclick en HTML
-window.cambiarVistaGlobal = cambiarVista;
+window.cambiarVistaGlobal = (nombreVista) => {
+    cambiarVista(nombreVista);
+    ocultarMenuMovil(); // Cerrar menú al navegar
+};
+
+/**
+ * Lógica del menú móvil
+ */
+function toggleMenuMovil() {
+    const nav = document.getElementById('nav-principal');
+    const overlay = document.getElementById('overlay-menu');
+    nav.classList.toggle('abierto');
+    overlay.classList.toggle('mostrar');
+}
+
+function ocultarMenuMovil() {
+    const nav = document.getElementById('nav-principal');
+    const overlay = document.getElementById('overlay-menu');
+    if (nav) nav.classList.remove('abierto');
+    if (overlay) overlay.classList.remove('mostrar');
+}
 
 
 
@@ -221,6 +241,17 @@ if (btnCerrarCarrito) {
 const btnCerrarBackdrop = document.getElementById('btn-cerrar-fondo-carrito');
 if (btnCerrarBackdrop) {
     btnCerrarBackdrop.addEventListener('click', ocultarCarritoModal);
+}
+
+// Listeners para menú móvil
+const btnMenu = document.getElementById('menu-toggle');
+if (btnMenu) {
+    btnMenu.addEventListener('click', toggleMenuMovil);
+}
+
+const overlayMenu = document.getElementById('overlay-menu');
+if (overlayMenu) {
+    overlayMenu.addEventListener('click', ocultarMenuMovil);
 }
 
 

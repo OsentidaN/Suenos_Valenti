@@ -102,6 +102,27 @@ body {
   height: 24px;
 }
 
+.header-acciones {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.menu-toggle {
+  display: none;
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: #2563eb;
+  transition: background-color 0.2s;
+}
+
+.menu-toggle:hover {
+  background-color: #dbeafe;
+}
+
 .insignia {
   position: absolute;
   top: -2px;
@@ -119,10 +140,50 @@ body {
   padding: 0;
 }
 
-/* Ocultar navegador en móvil */
+/* Ocultar navegador en móvil y preparar menú lateral */
 @media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
   .enlaces-navegacion {
+    position: fixed;
+    top: 0;
+    right: -100%;
+    width: 80%;
+    max-width: 300px;
+    height: 100vh;
+    background: white;
+    flex-direction: column;
+    padding: 5rem 2rem;
+    box-shadow: -4px 0 10px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 1001;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+
+  .enlaces-navegacion.abierto {
+    right: 0;
+  }
+
+  .enlaces-navegacion a {
+    width: 100%;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #f3f4f6;
+  }
+
+  /* Capa de fondo para el menú móvil */
+  .overlay-menu {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
     display: none;
+    z-index: 1000;
+  }
+
+  .overlay-menu.mostrar {
+    display: block;
   }
 }
 
