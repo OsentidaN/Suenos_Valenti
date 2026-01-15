@@ -12,6 +12,6 @@ export async function cargarSesiones() {
         return sesiones;
     } catch (error) {
         console.error('Error cargando sesiones:', error);
-        throw error;
+        return [];
     }
 }

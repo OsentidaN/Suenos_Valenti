@@ -23,9 +23,9 @@
                 </div>
 
                 <nav class="enlaces-navegacion" id="nav-principal">
-                    <a href="#" onclick="window.cambiarVistaGlobal('inicio'); return false;">Inicio</a>
-                    <a href="#" onclick="window.cambiarVistaGlobal('sesiones'); return false;">Sesiones</a>
-                    <a href="#" onclick="window.cambiarVistaGlobal('preferencias'); return false;">Preferencias</a>
+                    <a href="#" data-vista="inicio">Inicio</a>
+                    <a href="#" data-vista="sesiones">Sesiones</a>
+                    <a href="#" data-vista="preferencias">Preferencias</a>
                 </nav>
 
                 <div class="header-acciones">
@@ -66,7 +66,7 @@
                         despertar tu consciencia superior. Cada experiencia es única y
                         transformadora.
                     </p>
-                    <button class="boton-hero" onclick="window.cambiarVistaGlobal('sesiones')">
+                    <button class="boton-hero" data-vista="sesiones">
                         Explorar Sesiones
                     </button>
                 </div>
@@ -110,6 +110,7 @@
                             <span>Total:</span>
                             <span id="monto-total-carrito" class="monto-total">0.00€</span>
                         </div>
+                        <button class="boton-vaciar" id="btn-vaciar-carrito">Vaciar Carrito</button>
                         <button class="boton-pagar">Proceder al Pago</button>
                     </div>
                 </div>

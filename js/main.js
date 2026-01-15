@@ -8,14 +8,29 @@ import {
     eliminarDelCarrito,
     vaciarCarrito,
     agregarAlCarrito,
-    calcularTotal
 } from './cart.js';
 import { obtenerPreferencias, guardarPreferencias } from './utils.js';
 
 // Estado de la aplicación
 let sesiones = [];
 
-// Elementos del DOM
+
+// ========== CONSTANTES ==========
+const CLASES = {
+    ACTIVA: 'activa',
+    MOSTRAR: 'mostrar',
+    ABIERTO: 'abierto',
+    MODO_OSCURO: 'modo-oscuro',
+    OCULTO: 'oculto'
+};
+
+const MENSAJES = {
+    CONFIRMAR_BORRAR: '⚠️ Esto borrará todas tus sesiones guardadas y preferencias. ¿Continuar?',
+    DATOS_BORRADOS: '✅ Todos los datos han sido borrados',
+    ERROR_CARGA: 'Error al cargar las sesiones. Por favor, verifica que el archivo data/sesiones.json existe.'
+};
+
+// ========== FUNCIONES DE NAVEGACIÓN ==========
 /**
  * Obtiene los elementos de las vistas de forma diferida para mayor seguridad
  */
@@ -33,27 +48,20 @@ function obtenerElementosVistas() {
  */
 function cambiarVista(nombreVista) {
     console.log('Cambiando a vista:', nombreVista);
-    const elementosVistas = obtenerElementosVistas();
 
-    Object.keys(elementosVistas).forEach(key => {
-        if (elementosVistas[key]) {
-            elementosVistas[key].classList.remove('activa');
-        }
+    //Remover clase activa de todas las vistas
+    document.querySelectorAll('.vista').forEach(vista => {
+        vista.classList.remove(CLASES.ACTIVA);
     });
 
-    if (elementosVistas[nombreVista]) {
-        elementosVistas[nombreVista].classList.add('activa');
+    //Activar vista seleccionada
+    const vistaDestino = document.getElementById(`vista-${nombreVista}`);
+    if (vistaDestino) {
+        vistaDestino.classList.add(CLASES.ACTIVA);
     } else {
-        console.error('No se encontró la vista:', nombreVista);
+        console.error("Vista no encontrada: ", nombreVista);
     }
 }
-
-// Hacer la función global para que pueda ser llamada desde onclick en HTML
-window.cambiarVistaGlobal = (nombreVista) => {
-    console.log('Navegación solicitada (global):', nombreVista);
-    cambiarVista(nombreVista);
-    ocultarMenuMovil();
-};
 
 /**
  * Lógica del menú móvil
@@ -68,35 +76,71 @@ function toggleMenuMovil() {
 function ocultarMenuMovil() {
     const nav = document.getElementById('nav-principal');
     const overlay = document.getElementById('overlay-menu');
-    if (nav) nav.classList.remove('abierto');
-    if (overlay) overlay.classList.remove('mostrar');
+    nav?.classList.remove(CLASES.ABIERTO);
+    overlay?.classList.remove(CLASES.MOSTRAR);
 }
 
+// ========== FUNCIONES DE SESIONES ==========
 
+/** Inicializa los event listeners de navegación */
 
+function inicializarNavegacion() {
+    //Navegación por data-vista
+    document.querySelectorAll('[data-vista]').forEach(elemento => {
+        elemento.addEventListener('click', (e) => {
+            e.preventDefault();
+            const vista = e.currentTarget.dataset.vista;
+            console.log('Navegación solicitada:', vista);
+            cambiarVista(vista);
+            ocultarMenuMovil();
+        });
+    });
+
+    //Navegación por logo
+    document.getElementById('logo')?.addEventListener('click', () => {
+        cambiarVista('inicio');
+    })
+
+    //Menú móvil
+    document.getElementById('menu-toggle')?.addEventListener('click', toggleMenuMovil);
+    document.getElementById('overlay-menu')?.addEventListener('click', ocultarMenuMovil);
+}
 /**
  * Inicializa y carga las sesiones desde el JSON
  */
 async function inicializarSesiones() {
     const container = document.getElementById('contenedor-sesiones');
+    if (!container) {
+        console.error("Contenedor de sesiones no encontrado");
+        return;
+    }
     mostrarCargando(container);
-
     try {
         sesiones = await cargarSesiones();
-        mostrarSesiones();
+        renderizarSesiones(container, sesiones, alAgregarSesion);
     } catch (error) {
+        console.error("Error cargando sesiones:", error);
         container.innerHTML = '<p style="text-align:center; color: #ef4444;">Error al cargar las sesiones</p>';
     }
 }
 
-// Función para mostrar sesiones 
-function mostrarSesiones() {
+// ========== LÓGICA DEL CARRITO ==========
 
-    const container = document.getElementById('contenedor-sesiones');
-    renderizarSesiones(container, sesiones, agregarSesionAlCarrito); // Muestra todas las sesiones directamente
+/**
+ * Callback que se ejecuta al agregar una sesión al carrito
+ */
+function alAgregarSesion(sesion) {
+    const exito = agregarAlCarrito(sesion);
+    if (exito) {
+        actualizarBadgeCarrito();
+        console.log(`✓ "${sesion.nombre}" agregada al carrito`);
+    } else {
+        console.error("Error al agregar sesión al carrito.");
+    }
 }
 
-// ========== LÓGICA DEL CARRITO ==========
+
+// ========== FUNCIONES DEL CARRITO ==========
 
 function actualizarBadgeCarrito() {
     const carrito = obtenerCarrito();
@@ -126,152 +170,154 @@ function mostrarCarrito() {
             guardarCarrito(carrito);
             mostrarCarrito();
             actualizarBadgeCarrito();
-        },
-        // Callback Vaciar
-        () => {
-            if (confirm('¿Deseas vaciar todo el carrito?')) {
-                vaciarCarrito();
-                mostrarCarrito();
-                actualizarBadgeCarrito();
-            }
         }
     );
-    const overlay = document.getElementById('modal-carrito');
-    if (overlay) overlay.classList.add('mostrar');
+    document.getElementById('modal-carrito')?.classList.add(CLASES.MOSTRAR);
 }
 
 function ocultarCarritoModal() {
-    const overlay = document.getElementById('modal-carrito');
-    if (overlay) overlay.classList.remove('mostrar');
+    document.getElementById('modal-carrito')?.classList.remove(CLASES.MOSTRAR);
 }
 
 /**
- * Agrega una sesión al carrito
+ * Inicializa los event listeners del carrito
  */
-function agregarSesionAlCarrito(sesion) {
-    const carrito = obtenerCarrito();
-    const existe = carrito.find(i => i.id === sesion.id);
-    if (existe) {
-        existe.cantidad = (existe.cantidad || 1) + 1;
-    } else {
-        sesion.cantidad = 1;
-        carrito.push(sesion);
-    }
-
-    guardarCarrito(carrito);
-    actualizarBadgeCarrito();
-    mostrarCarrito(); // Abrir carrito al agregar
+function inicializarCarrito() {
+    document.getElementById('btn-carrito')?.addEventListener('click', mostrarCarrito);
+    document.getElementById('btn-cerrar-carrito')?.addEventListener('click', ocultarCarritoModal);
+    document.getElementById('btn-cerrar-fondo-carrito')?.addEventListener('click', ocultarCarritoModal);
+    document.getElementById('btn-vaciar-carrito')?.addEventListener('click', () => {
+        if (confirm('¿Deseas vaciar todo el carrito?')) {
+            vaciarCarrito();
+            mostrarCarrito();
+            actualizarBadgeCarrito();
+        }
+    });
 }
+
+
+// ========== PREFERENCIAS ==========
 
 /**
  * Inicializa la gestión de preferencias
  */
 function inicializarPreferencias() {
     const prefs = obtenerPreferencias();
-    const btnTema = document.getElementById('btn-tema');
-    const toggleNotif = document.getElementById('interruptor-notificaciones');
-    const toggleWrapper = document.getElementById('contenedor-interruptor-notif') || toggleNotif; // Usa el wrapper si existe, sino el elemento
 
-    // Aplicar tema inicial
-    const esOscuro = prefs.tema === 'oscuro';
-    document.body.classList.toggle('modo-oscuro', esOscuro);
+    //Aplicar tema inicial
+    aplicarTema(prefs.tema);
+
+    //Aplicar notificaciones inicial 
+    const toggle = document.getElementById('interruptor-notificaciones');
+    if (toggle) {
+        toggle.classList.toggle(CLASES.ACTIVA, prefs.notificaciones);
+    }
+
+    //Event Listeners
+    configurarEventoTema();
+    configurarEventoNotificaciones();
+    configurarEventoBorrarDatos();
+}
+
+/**
+* Aplica el tema visual
+*/
+function aplicarTema(tema) {
+    const esOscuro = tema === 'oscuro';
+    document.body.classList.toggle(CLASES.MODO_OSCURO, esOscuro);
+
+    const btnTema = document.getElementById('btn-tema');
     if (btnTema) {
         btnTema.textContent = esOscuro ? '🌙 Oscuro' : '☀️ Claro';
     }
+}
 
-    // Aplicar notificaciones inicial
-    if (toggleNotif) {
-        toggleNotif.classList.toggle('activo', prefs.notificaciones);
-    }
+/**
+ * Configura el evento de cambio de tema
+ */
+function configurarEventoTema() {
+    const btnTema = document.getElementById('btn-tema');
+    if (!btnTema) return;
 
-    // Evento para cambiar tema
-    if (btnTema) {
-        btnTema.addEventListener('click', () => {
-            const current = obtenerPreferencias();
-            const nuevoTema = current.tema === 'claro' ? 'oscuro' : 'claro';
+    btnTema.addEventListener('click', () => {
+        const prefs = obtenerPreferencias();
+        const nuevoTema = prefs.tema === 'claro' ? 'oscuro' : 'claro';
 
-            // Actualizar estado
-            current.tema = nuevoTema;
-            guardarPreferencias(current);
+        prefs.tema = nuevoTema;
+        guardarPreferencias(prefs);
+        aplicarTema(nuevoTema);
+    });
+}
 
-            // Aplicar cambios UI
-            const esAhoraOscuro = nuevoTema === 'oscuro';
-            document.body.classList.toggle('modo-oscuro', esAhoraOscuro);
-            btnTema.textContent = esAhoraOscuro ? '🌙 Oscuro' : '☀️ Claro';
-        });
-    }
+/**
+ * Configura el evento de cambio de notificaciones
+ */
+function configurarEventoNotificaciones() {
+    const contenedor = document.getElementById('contenedor-interruptor-notif');
+    const toggle = document.getElementById('interruptor-notificaciones');
 
-    // Evento para cambiar notificaciones
-    if (toggleWrapper) {
-        toggleWrapper.addEventListener('click', () => {
-            const current = obtenerPreferencias();
-            current.notificaciones = !current.notificaciones;
-            guardarPreferencias(current);
+    const elemento = contenedor || toggle;
+    if (!elemento) return;
 
-            if (toggleNotif) {
-                toggleNotif.classList.toggle('activo', current.notificaciones);
-            }
-        });
-    }
+    elemento.addEventListener('click', () => {
+        const prefs = obtenerPreferencias();
+        prefs.notificaciones = !prefs.notificaciones;
+        guardarPreferencias(prefs);
 
-    // Evento para borrar todos los datos
+        if (toggle) {
+            toggle.classList.toggle(CLASES.ACTIVA, prefs.notificaciones);
+        }
+    });
+}
+
+/**
+ * Configura el evento de borrar datos
+ */
+function configurarEventoBorrarDatos() {
     const btnBorrar = document.getElementById('btn-borrar-datos');
-    if (btnBorrar) {
-        btnBorrar.addEventListener('click', () => {
-            if (confirm('⚠️ Esto borrará todas tus sesiones guardadas y preferencias. ¿Continuar?')) {
-                localStorage.clear();
-                vaciarCarrito();
-                alert('✅ Todos los datos han sido borrados');
+    if (!btnBorrar) return;
 
-                // Reset visuales
-                document.body.classList.remove('modo-oscuro');
-                if (btnTema) btnTema.textContent = '☀️ Claro';
-                if (toggleNotif) toggleNotif.classList.add('activo'); // Por defecto true
+    btnBorrar.addEventListener('click', () => {
+        if (confirm(MENSAJES.CONFIRMAR_BORRAR)) {
+            // Limpiar todo el localStorage
+            localStorage.clear();
 
+            // Resetear interfaz
+            document.body.classList.remove(CLASES.MODO_OSCURO);
 
-                actualizarBadgeCarrito();
-            }
-        });
-    }
+            const btnTema = document.getElementById('btn-tema');
+            if (btnTema) btnTema.textContent = '☀️ Claro';
+
+            const toggle = document.getElementById('interruptor-notificaciones');
+            if (toggle) toggle.classList.add(CLASES.ACTIVA);
+
+            actualizarInterfazCarrito();
+
+            alert(MENSAJES.DATOS_BORRADOS);
+        }
+    });
 }
 
-// ========== EVENT LISTENERS ==========
+// ========== INICIALIZACIÓN PRINCIPAL ==========
 
-// Navegación principal
-const logoBtn = document.getElementById('logo');
-if (logoBtn) {
-    logoBtn.addEventListener('click', () => cambiarVista('inicio'));
+function inicializarApp() {
+    console.log('🚀 Inicializando Sueños Valenti...');
+
+    // Inicializar módulos
+    inicializarNavegacion();
+    inicializarCarrito();
+    inicializarPreferencias();
+    inicializarSesiones();
+
+    // Actualizar UI inicial
+    actualizarBadgeCarrito();
+
+    console.log('✓ Aplicación inicializada correctamente');
 }
 
-// Listeners para botones del carrito 
-const btnCarrito = document.getElementById('btn-carrito');
-if (btnCarrito) {
-    btnCarrito.addEventListener('click', mostrarCarrito);
+// Ejecutar cuando el DOM esté listo
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', inicializarApp);
+} else {
+    inicializarApp();
 }
-
-const btnCerrarCarrito = document.getElementById('btn-cerrar-carrito');
-if (btnCerrarCarrito) {
-    btnCerrarCarrito.addEventListener('click', ocultarCarritoModal);
-}
-
-const btnCerrarBackdrop = document.getElementById('btn-cerrar-fondo-carrito');
-if (btnCerrarBackdrop) {
-    btnCerrarBackdrop.addEventListener('click', ocultarCarritoModal);
-}
-
-// Listeners para menú móvil
-const btnMenu = document.getElementById('menu-toggle');
-if (btnMenu) {
-    btnMenu.addEventListener('click', toggleMenuMovil);
-}
-
-const overlayMenu = document.getElementById('overlay-menu');
-if (overlayMenu) {
-    overlayMenu.addEventListener('click', ocultarMenuMovil);
-}
-
-
-// ========== INICIALIZACIÓN ==========
-inicializarSesiones();
-inicializarPreferencias();
-actualizarBadgeCarrito();

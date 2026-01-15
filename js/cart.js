@@ -9,6 +9,9 @@ const CARRITO_KEY = 'carrito_espiritual';
 export function obtenerCarrito() {
     try {
         const carrito = localStorage.getItem(CARRITO_KEY);
+        if (!carrito) {
+            return [];
+        }
         return carrito ? JSON.parse(carrito) : [];
     } catch (error) {
         console.error('Error al obtener carrito:', error);
@@ -21,9 +24,15 @@ export function obtenerCarrito() {
  */
 export function guardarCarrito(carrito) {
     try {
+        if (!Array.isArray(carrito)) {
+            console.error("Se intenta guardar un carrito que no es un array.");
+            return false;
+        }
         localStorage.setItem(CARRITO_KEY, JSON.stringify(carrito));
+        return true;
     } catch (error) {
         console.error('Error al guardar carrito:', error);
+        return false;
     }
 }
 
@@ -40,11 +49,8 @@ export function agregarAlCarrito(sesion) {
         carrito.push({ ...sesion, cantidad: 1 });
     }
 
-    guardarCarrito(carrito);
+    return guardarCarrito(carrito);
 }
-
-
-
 /**
  * Elimina una sesión del carrito
  */
